@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AidPulse — NGO Intelligence & Volunteer Command Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --ink:#0a0c0e;
+  --ink2:#1c2028;
+  --surface:#f5f3ee;
+  --card:#ffffff;
+  --border:rgba(10,12,14,.10);
+  --border2:rgba(10,12,14,.06);
+  --red:#e63329;
+  --orange:#f07c2b;
+  --green:#1a9e5c;
+  --blue:#1f65d4;
+  --yellow:#f5c518;
+  --dim:#6b7280;
+  --radius:12px;
+  --font-head:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-mono:'DM Mono',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{background:var(--surface);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.65;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(245,243,238,.85);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:0 5vw}
+.nav-inner{max-width:1200px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--font-head);font-weight:800;font-size:1.25rem;letter-spacing:-.02em;color:var(--ink)}
+.nav-logo span{color:var(--red)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--dim);font-size:.875rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{background:var(--ink);color:#fff;padding:8px 20px;border-radius:6px;font-size:.875rem;font-weight:500;text-decoration:none;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 5vw 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(10,12,14,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(10,12,14,.05) 1px,transparent 1px);background-size:48px 48px;animation:gridScroll 40s linear infinite}
+@keyframes gridScroll{to{background-position:48px 48px}}
+.hero-glow{position:absolute;top:-20%;right:-10%;width:700px;height:700px;background:radial-gradient(circle,rgba(230,51,41,.12) 0%,transparent 70%);animation:pulse 8s ease-in-out infinite}
+.hero-glow2{position:absolute;bottom:-20%;left:-5%;width:600px;height:600px;background:radial-gradient(circle,rgba(31,101,212,.10) 0%,transparent 70%);animation:pulse 10s ease-in-out infinite 2s}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.1);opacity:1}}
+.hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(230,51,41,.1);border:1px solid rgba(230,51,41,.25);border-radius:100px;padding:5px 14px;font-size:.8rem;font-weight:500;color:var(--red);margin-bottom:28px;animation:fadeUp .8s ease both}
+.hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-headline{font-family:var(--font-head);font-weight:800;font-size:clamp(3rem,6.5vw,6rem);line-height:1.0;letter-spacing:-.04em;color:var(--ink);margin-bottom:28px;animation:fadeUp .9s ease .1s both}
+.hero-headline em{font-style:normal;color:var(--red)}
+.hero-sub{font-size:clamp(1rem,2vw,1.25rem);color:var(--dim);max-width:580px;margin-bottom:48px;font-weight:300;animation:fadeUp 1s ease .2s both}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp 1s ease .3s both}
+.btn-primary{background:var(--ink);color:#fff;padding:14px 28px;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:.95rem;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .2s,box-shadow .2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(10,12,14,.2)}
+.btn-secondary{background:transparent;color:var(--ink);padding:14px 28px;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:.95rem;text-decoration:none;border:1.5px solid var(--border);display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.btn-secondary:hover{background:var(--card);border-color:var(--ink)}
+.hero-stats{display:flex;gap:48px;margin-top:72px;animation:fadeUp 1s ease .4s both;flex-wrap:wrap}
+.stat{border-top:2px solid var(--ink);padding-top:14px}
+.stat-num{font-family:var(--font-head);font-weight:800;font-size:2.25rem;color:var(--ink);letter-spacing:-.03em}
+.stat-label{font-size:.8rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-weight:500}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* LIVE MAP SIMULATION */
+.map-section{padding:80px 5vw;background:var(--ink2);position:relative;overflow:hidden}
+.map-section-inner{max-width:1200px;margin:0 auto}
+.section-label{font-family:var(--font-mono);font-size:.75rem;color:var(--red);text-transform:uppercase;letter-spacing:.12em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-label::before{content:'';display:block;width:24px;height:2px;background:var(--red)}
+.section-title{font-family:var(--font-head);font-weight:800;font-size:clamp(2rem,4vw,3.5rem);letter-spacing:-.04em;color:#fff;margin-bottom:18px}
+.section-sub{color:rgba(255,255,255,.5);font-size:1.05rem;font-weight:300;max-width:520px;margin-bottom:48px}
+.map-demo{background:#0f1420;border-radius:16px;border:1px solid rgba(255,255,255,.08);overflow:hidden;position:relative;height:440px}
+.map-canvas{width:100%;height:100%;position:relative}
+.map-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px}
+.map-controls{position:absolute;top:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:10}
+.map-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 14px;color:#fff;font-family:var(--font-mono);font-size:.7rem;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap}
+.map-btn:hover,.map-btn.active{background:var(--red);border-color:var(--red)}
+.map-legend{position:absolute;bottom:16px;left:16px;background:rgba(15,20,32,.8);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:rgba(255,255,255,.7)}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+.marker{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:5}
+.marker-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;animation:ringPulse 2s ease-in-out infinite}
+@keyframes ringPulse{0%{transform:translate(-50%,-50%) scale(1);opacity:.7}100%{transform:translate(-50%,-50%) scale(3);opacity:0}}
+.marker-core{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.6);position:relative;z-index:1}
+.marker.critical .marker-ring{width:20px;height:20px;border:2px solid var(--red);animation-duration:1.2s}
+.marker.critical .marker-core{background:var(--red);width:18px;height:18px}
+.marker.moderate .marker-ring{width:18px;height:18px;border:2px solid var(--orange)}
+.marker.moderate .marker-core{background:var(--orange)}
+.marker.low .marker-ring{width:16px;height:16px;border:2px solid var(--green)}
+.marker.low .marker-core{background:var(--green)}
+.volunteer{position:absolute;transform:translate(-50%,-50%);z-index:8;transition:top 3s cubic-bezier(.4,0,.2,1),left 3s cubic-bezier(.4,0,.2,1)}
+.vol-dot{width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--blue)}
+.vol-trail{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(31,101,212,.5);animation:trail 2s ease-in-out infinite}
+@keyframes trail{0%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(2.5);opacity:0}}
+.map-hud{position:absolute;top:16px;left:16px;display:flex;flex-direction:column;gap:8px;z-index:10}
+.hud-chip{background:rgba(15,20,32,.85);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:7px 12px;font-family:var(--font-mono);font-size:.68rem;color:rgba(255,255,255,.8)}
+.hud-chip span{color:#fff;font-weight:500}
+.crisis-flash{position:absolute;inset:0;background:rgba(230,51,41,.08);border-radius:16px;pointer-events:none;opacity:0;transition:opacity .5s;z-index:2}
+.crisis-flash.on{opacity:1;animation:crisisFlash 1s ease-in-out infinite}
+@keyframes crisisFlash{0%,100%{opacity:.08}50%{opacity:.2}}
+
+/* FEATURES GRID */
+.features{padding:100px 5vw;background:var(--surface)}
+.features-inner{max-width:1200px;margin:0 auto}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:2px;margin-top:60px;border:2px solid var(--ink);border-radius:16px;overflow:hidden}
+.feature-card{background:var(--card);padding:36px 32px;position:relative;overflow:hidden;transition:background .3s;cursor:default}
+.feature-card:hover{background:#faf8f3}
+.feature-card::after{content:'';position:absolute;top:0;left:0;width:4px;height:0;background:var(--accent,var(--red));transition:height .4s ease}
+.feature-card:hover::after{height:100%}
+.feature-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:20px;background:var(--icon-bg,rgba(230,51,41,.1))}
+.feature-title{font-family:var(--font-head);font-weight:700;font-size:1.2rem;letter-spacing:-.02em;margin-bottom:10px;color:var(--ink)}
+.feature-desc{font-size:.9rem;color:var(--dim);line-height:1.7}
+.feature-formula{font-family:var(--font-mono);font-size:.72rem;color:var(--accent,var(--red));background:rgba(230,51,41,.07);border-radius:6px;padding:8px 12px;margin-top:14px;line-height:1.8}
+
+/* PRIORITY ENGINE */
+.priority-section{padding:100px 5vw;background:var(--ink)}
+.priority-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+@media(max-width:900px){.priority-inner{grid-template-columns:1fr}}
+.priority-live{background:var(--ink2);border-radius:16px;padding:28px;border:1px solid rgba(255,255,255,.08)}
+.priority-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.priority-header-title{font-family:var(--font-mono);font-size:.72rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em}
+.live-badge{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.68rem;color:var(--red)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.2s ease-in-out infinite}
+.issue-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.issue-row:last-child{border-bottom:none}
+.issue-sev{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.issue-name{flex:1;font-size:.85rem;color:rgba(255,255,255,.85)}
+.issue-loc{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:2px}
+.issue-bar-wrap{width:100px}
+.issue-bar{height:4px;border-radius:2px;transition:width .8s ease}
+.issue-score{font-family:var(--font-mono);font-size:.8rem;font-weight:500;min-width:32px;text-align:right}
+.issue-label{font-size:.65rem;border-radius:4px;padding:2px 7px;font-weight:600;letter-spacing:.04em}
+.priority-text .section-title{color:#fff}
+.priority-text .section-sub{color:rgba(255,255,255,.5)}
+.score-formula{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:20px 24px;margin-top:28px;font-family:var(--font-mono);font-size:.88rem;color:rgba(255,255,255,.7);line-height:2}
+.score-formula strong{color:var(--red);font-weight:500}
+
+/* VOLUNTEER MATCHING */
+.matching-section{padding:100px 5vw;background:var(--surface)}
+.matching-inner{max-width:1200px;margin:0 auto}
+.matching-demo{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start;margin-top:48px}
+@media(max-width:800px){.matching-demo{grid-template-columns:1fr}}
+.match-panel{background:var(--card);border-radius:14px;border:1.5px solid var(--border);overflow:hidden}
+.match-panel-head{padding:16px 20px;border-bottom:1px solid var(--border);font-family:var(--font-head);font-size:.85rem;font-weight:700;letter-spacing:.01em;display:flex;align-items:center;gap:8px}
+.vol-card{padding:14px 20px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:12px;transition:background .2s}
+.vol-card:hover{background:#faf8f3}
+.vol-card:last-child{border-bottom:none}
+.vol-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:700;font-size:.8rem;flex-shrink:0}
+.vol-info{flex:1}
+.vol-name{font-size:.85rem;font-weight:500}
+.vol-skills{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.skill-tag{font-size:.65rem;padding:2px 7px;border-radius:4px;font-weight:500}
+.match-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px 0}
+.arrow-line{width:2px;height:40px;background:linear-gradient(to bottom,var(--ink),transparent)}
+.arrow-head{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid var(--ink)}
+.match-score-badge{background:var(--ink);color:#fff;border-radius:8px;padding:6px 12px;font-family:var(--font-mono);font-size:.68rem;text-align:center;white-space:nowrap}
+.task-card{padding:14px 20px;border-bottom:1px solid var(--border2);transition:background .2s}
+.task-card:hover{background:#faf8f3}
+.task-card:last-child{border-bottom:none}
+.task-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.task-name{font-size:.85rem;font-weight:500}
+.task-urgency{font-size:.65rem;border-radius:4px;padding:2px 7px;font-weight:600}
+.task-meta{font-size:.72rem;color:var(--dim)}
+
+/* CRISIS MODE */
+.crisis-section{padding:100px 5vw;background:var(--ink2);position:relative;overflow:hidden}
+.crisis-inner{max-width:1200px;margin:0 auto}
+.crisis-bg-text{position:absolute;top:-40px;left:-20px;font-family:var(--font-head);font-weight:800;font-size:18vw;color:rgba(230,51,41,.04);letter-spacing:-.06em;pointer-events:none;user-select:none;line-height:1}
+.crisis-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:60px;align-items:start}
+@media(max-width:900px){.crisis-grid{grid-template-columns:1fr}}
+.crisis-trigger-btn{display:flex;align-items:center;gap:10px;background:var(--red);color:#fff;border:none;border-radius:10px;padding:16px 24px;font-family:var(--font-head);font-weight:700;font-size:1rem;cursor:pointer;margin-bottom:28px;width:100%;justify-content:center;transition:transform .2s,box-shadow .2s;letter-spacing:-.01em}
+.crisis-trigger-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(230,51,41,.4)}
+.crisis-timeline{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px}
+.timeline-item{display:flex;gap:14px;margin-bottom:20px;position:relative}
+.timeline-item:last-child{margin-bottom:0}
+.timeline-item::before{content:'';position:absolute;left:16px;top:28px;bottom:-20px;width:1px;background:rgba(255,255,255,.1)}
+.timeline-item:last-child::before{display:none}
+.tl-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem}
+.tl-content{flex:1;padding-top:4px}
+.tl-title{font-size:.9rem;color:#fff;font-weight:500;margin-bottom:3px}
+.tl-desc{font-size:.78rem;color:rgba(255,255,255,.45)}
+.tl-time{font-family:var(--font-mono);font-size:.68rem;color:rgba(255,255,255,.25);margin-top:4px}
+.crisis-metrics{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.crisis-metric{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:20px}
+.cm-label{font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.cm-val{font-family:var(--font-head);font-weight:800;font-size:2rem;letter-spacing:-.04em}
+.cm-change{font-size:.75rem;margin-top:4px;display:flex;align-items:center;gap:4px}
+
+/* ANALYTICS */
+.analytics-section{padding:100px 5vw;background:var(--surface)}
+.analytics-inner{max-width:1200px;margin:0 auto}
+.analytics-grid{display:grid;grid-template-columns:2fr 1fr;gap:28px;margin-top:60px}
+@media(max-width:900px){.analytics-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:28px}
+.chart-title{font-family:var(--font-head);font-weight:700;font-size:1rem;margin-bottom:4px}
+.chart-sub{font-size:.8rem;color:var(--dim);margin-bottom:24px}
+.bar-chart{display:flex;align-items:flex-end;gap:10px;height:160px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar{width:100%;border-radius:5px 5px 0 0;transition:height 1s ease;min-height:4px}
+.bar-label{font-size:.68rem;color:var(--dim);text-align:center}
+.bar-val{font-family:var(--font-mono);font-size:.72rem;font-weight:500}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;height:160px}
+.donut-svg{width:120px;height:120px}
+.donut-legend{display:flex;flex-direction:column;gap:6px;width:100%}
+.dl-item{display:flex;align-items:center;gap:8px;font-size:.75rem}
+.dl-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+@media(max-width:700px){.metrics-row{grid-template-columns:1fr 1fr}}
+.metric-card{background:var(--card);border-radius:12px;border:1.5px solid var(--border);padding:20px 18px}
+.mc-val{font-family:var(--font-head);font-weight:800;font-size:2rem;letter-spacing:-.04em;color:var(--ink)}
+.mc-label{font-size:.75rem;color:var(--dim);margin-top:4px}
+.mc-delta{font-size:.72rem;margin-top:6px;font-weight:500}
+.mc-delta.up{color:var(--green)}
+.mc-delta.down{color:var(--red)}
+
+/* BEFORE-AFTER */
+.compare-section{padding:100px 5vw;background:var(--ink)}
+.compare-inner{max-width:1200px;margin:0 auto}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:60px}
+@media(max-width:700px){.compare-grid{grid-template-columns:1fr}}
+.compare-col{border-radius:14px;overflow:hidden}
+.compare-head{padding:20px 24px;font-family:var(--font-head);font-weight:700;font-size:1.1rem}
+.without-head{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+.with-head{background:var(--red);color:#fff}
+.compare-body{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-top:none;padding:8px 0}
+.compare-item{display:flex;align-items:center;gap:12px;padding:12px 24px}
+.compare-icon{font-size:1rem;width:24px;text-align:center}
+.compare-text{font-size:.85rem;color:rgba(255,255,255,.6)}
+.compare-item.good .compare-text{color:rgba(255,255,255,.85)}
+
+/* CTA */
+.cta-section{padding:120px 5vw;background:var(--red);position:relative;overflow:hidden}
+.cta-bg{position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(255,255,255,.12) 0%,transparent 60%),radial-gradient(circle at 80% 50%,rgba(0,0,0,.15) 0%,transparent 60%)}
+.cta-inner{max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.cta-inner .section-label::before{background:#fff}
+.cta-inner .section-label{color:rgba(255,255,255,.7);margin-bottom:20px;justify-content:center}
+.cta-title{font-family:var(--font-head);font-weight:800;font-size:clamp(2.5rem,5vw,4.5rem);letter-spacing:-.05em;color:#fff;margin-bottom:20px;line-height:1}
+.cta-sub{color:rgba(255,255,255,.75);font-size:1.1rem;margin-bottom:48px;font-weight:300}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-white{background:#fff;color:var(--red);padding:14px 28px;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:.95rem;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.2)}
+.btn-outline-white{background:transparent;color:#fff;padding:14px 28px;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:.95rem;text-decoration:none;border:2px solid rgba(255,255,255,.5);transition:all .2s}
+.btn-outline-white:hover{background:rgba(255,255,255,.15);border-color:#fff}
+
+/* FOOTER */
+footer{background:var(--ink);padding:48px 5vw;border-top:1px solid rgba(255,255,255,.07)}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-family:var(--font-head);font-weight:800;font-size:1.1rem;color:#fff}
+.footer-logo span{color:var(--red)}
+.footer-note{font-size:.8rem;color:rgba(255,255,255,.3)}
+
+/* SCROLL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(10,12,14,.2);border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Aid<span>Pulse</span></div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#priority">AI Engine</a></li>
+      <li><a href="#matching">Matching</a></li>
+      <li><a href="#crisis">Crisis Mode</a></li>
+      <li><a href="#analytics">Analytics</a></li>
+    </ul>
+    <a href="#cta" class="nav-cta">Request Demo →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Live System Active — 247 Volunteers Deployed
+    </div>
+    <h1 class="hero-headline">
+      NGO Intelligence<br><em>Reimagined.</em>
+    </h1>
+    <p class="hero-sub">Centralize scattered field data. Score issues with AI. Deploy volunteers to critical needs — all in real time.</p>
+    <div class="hero-actions">
+      <a href="#map" class="btn-primary">Watch Live Demo ↓</a>
+      <a href="#features" class="btn-secondary">Explore Features</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num" id="counter-issues">2,847</div>
+        <div class="stat-label">Issues Tracked</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">94%</div>
+        <div class="stat-label">Match Accuracy</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3.2×</div>
+        <div class="stat-label">Faster Response</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">61</div>
+        <div class="stat-label">NGOs Onboarded</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE MAP -->
+<section class="map-section" id="map">
+  <div class="map-section-inner">
+    <div class="section-label">Live Simulation</div>
+    <h2 class="section-title reveal">Field View,<br>In Real Time</h2>
+    <p class="section-sub reveal reveal-delay-1">Watch severity markers update and volunteers navigate dynamically as new reports arrive from the field.</p>
+    <div class="map-demo reveal reveal-delay-2" id="mapDemo">
+      <div class="map-canvas" id="mapCanvas">
+        <div class="map-grid-lines"></div>
+        <div class="crisis-flash" id="crisisFlash"></div>
+
+        <!-- HUD -->
+        <div class="map-hud">
+          <div class="hud-chip">Active issues: <span id="hudIssues">12</span></div>
+          <div class="hud-chip">Volunteers: <span id="hudVols">8</span></div>
+          <div class="hud-chip" id="hudMode">Mode: <span>Normal</span></div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="map-controls">
+          <a class="map-btn active" id="btnNormal" onclick="setMode('normal')">Normal Mode</a>
+          <a class="map-btn" id="btnCrisis" onclick="setMode('crisis')">Trigger Crisis ⚡</a>
+          <a class="map-btn" id="btnOptimize" onclick="optimizeRoutes()">Optimize Routes ✦</a>
+        </div>
+
+        <!-- LEGEND -->
+        <div class="map-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Critical</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Moderate</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Low</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#fff;border:1.5px solid var(--blue)"></div>Volunteer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="section-label reveal">System Architecture</div>
+    <h2 class="section-title reveal" style="color:var(--ink)">Six Engines,<br>One Platform</h2>
+    <div class="features-grid reveal reveal-delay-2">
+      <div class="feature-card" style="--accent:var(--red);--icon-bg:rgba(230,51,41,.1)">
+        <div class="feature-icon">📥</div>
+        <div class="feature-title">Data Aggregation Engine</div>
+        <p class="feature-desc">Ingest CSV uploads, mobile forms, and live field reports from multiple NGOs. Standardized, structured, and instantly searchable.</p>
+        <div class="feature-formula">Input → Normalize → MongoDB / PostgreSQL → Dashboard</div>
+      </div>
+      <div class="feature-card" style="--accent:var(--orange);--icon-bg:rgba(240,124,43,.1)">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">AI Priority Scoring</div>
+        <p class="feature-desc">Every issue gets a live composite score. Critical needs surface instantly. Scores update in real time as new reports arrive.</p>
+        <div class="feature-formula" style="color:var(--orange);background:rgba(240,124,43,.08)">Score = (Severity×0.5) + (Freq×0.3) + (Recency×0.2)</div>
+      </div>
+      <div class="feature-card" style="--accent:var(--blue);--icon-bg:rgba(31,101,212,.1)">
+        <div class="feature-icon">🗺️</div>
+        <div class="feature-title">Live Marker Map</div>
+        <p class="feature-desc">Blinking severity markers. Moving volunteers. Task assignments. Everything visible — no heatmap ambiguity.</p>
+        <div class="feature-formula" style="color:var(--blue);background:rgba(31,101,212,.07)">Mapbox GL · Severity-coded markers · Real-time updates</div>
+      </div>
+      <div class="feature-card" style="--accent:var(--green);--icon-bg:rgba(26,158,92,.1)">
+        <div class="feature-icon">🤝</div>
+        <div class="feature-title">Smart Volunteer Matching</div>
+        <p class="feature-desc">Skill proximity availability scoring ensures the right volunteer reaches the right crisis at the right time.</p>
+        <div class="feature-formula" style="color:var(--green);background:rgba(26,158,92,.08)">Match = Skill + Distance + Availability</div>
+      </div>
+      <div class="feature-card" style="--accent:#7c3aed;--icon-bg:rgba(124,58,237,.1)">
+        <div class="feature-icon">⚙️</div>
+        <div class="feature-title">Task Optimization Engine</div>
+        <p class="feature-desc">Minimize travel. Maximize coverage. A/B view of before vs after optimization with measurable time savings.</p>
+        <div class="feature-formula" style="color:#7c3aed;background:rgba(124,58,237,.07)">Optimize: Coverage% · Travel Time · Completion Speed</div>
+      </div>
+      <div class="feature-card" style="--accent:var(--red);--icon-bg:rgba(230,51,41,.1)">
+        <div class="feature-icon">🚨</div>
+        <div class="feature-title">Crisis Mode Simulator</div>
+        <p class="feature-desc">Trigger flood, outbreak, or famine scenarios. System re-prioritizes and reassigns in under 200ms. See bottlenecks instantly.</p>
+        <div class="feature-formula">Crisis → Re-prioritize → Reassign → Alert → Track</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIORITY ENGINE -->
+<section class="priority-section" id="priority">
+  <div class="priority-inner">
+    <div class="priority-text">
+      <div class="section-label reveal" style="color:var(--red)">AI Engine</div>
+      <h2 class="section-title reveal">Live Priority<br>Scoring</h2>
+      <p class="section-sub reveal reveal-delay-1">Watch as scores update in real time. Critical issues float to the top. Volunteers are never guessing — the system tells them exactly where to go.</p>
+      <div class="score-formula reveal reveal-delay-2">
+        <strong>Priority</strong> = (Severity × <strong>0.5</strong>)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (Frequency × <strong>0.3</strong>)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (Recency × <strong>0.2</strong>)
+      </div>
+    </div>
+    <div class="priority-live reveal reveal-delay-2">
+      <div class="priority-header">
+        <div class="priority-header-title">Live Issue Queue</div>
+        <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+      </div>
+      <div id="issueList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- VOLUNTEER MATCHING -->
+<section class="matching-section" id="matching">
+  <div class="matching-inner">
+    <div class="section-label reveal">Smart Matching</div>
+    <h2 class="section-title reveal" style="color:var(--ink)">Right Person,<br>Right Crisis</h2>
+    <p class="reveal reveal-delay-1" style="color:var(--dim);max-width:520px;margin-bottom:0">The matching engine scores every volunteer against every open task. Skills, distance, and real-time availability combine into a single match score.</p>
+    <div class="matching-demo">
+      <div class="match-panel reveal">
+        <div class="match-panel-head">
+          <span>👤</span> Available Volunteers
+        </div>
+        <div class="vol-card">
+          <div class="vol-avatar" style="background:rgba(31,101,212,.15);color:var(--blue)">RK</div>
+          <div class="vol-info">
+            <div class="vol-name">Rohit Kumar</div>
+            <div class="vol-skills">
+              <span class="skill-tag" style="background:rgba(26,158,92,.12);color:var(--green)">Medical</span>
+              <span class="skill-tag" style="background:rgba(31,101,212,.1);color:var(--blue)">Logistics</span>
+            </div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.72rem;color:var(--dim)">1.2km</div>
+        </div>
+        <div class="vol-card">
+          <div class="vol-avatar" style="background:rgba(240,124,43,.12);color:var(--orange)">PM</div>
+          <div class="vol-info">
+            <div class="vol-name">Priya Mehta</div>
+            <div class="vol-skills">
+              <span class="skill-tag" style="background:rgba(124,58,237,.1);color:#7c3aed">Teaching</span>
+              <span class="skill-tag" style="background:rgba(26,158,92,.12);color:var(--green)">First Aid</span>
+            </div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.72rem;color:var(--dim)">3.4km</div>
+        </div>
+        <div class="vol-card">
+          <div class="vol-avatar" style="background:rgba(230,51,41,.12);color:var(--red)">AS</div>
+          <div class="vol-info">
+            <div class="vol-name">Asha Singh</div>
+            <div class="vol-skills">
+              <span class="skill-tag" style="background:rgba(31,101,212,.1);color:var(--blue)">Logistics</span>
+              <span class="skill-tag" style="background:rgba(230,51,41,.1);color:var(--red)">Relief</span>
+            </div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.72rem;color:var(--dim)">0.8km</div>
+        </div>
+        <div class="vol-card">
+          <div class="vol-avatar" style="background:rgba(26,158,92,.12);color:var(--green)">DJ</div>
+          <div class="vol-info">
+            <div class="vol-name">Dev Joshi</div>
+            <div class="vol-skills">
+              <span class="skill-tag" style="background:rgba(26,158,92,.12);color:var(--green)">Medical</span>
+              <span class="skill-tag" style="background:rgba(240,124,43,.12);color:var(--orange)">Counseling</span>
+            </div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.72rem;color:var(--dim)">2.1km</div>
+        </div>
+      </div>
+
+      <div class="match-arrow reveal reveal-delay-1">
+        <div class="arrow-line"></div>
+        <div class="match-score-badge">AI Match<br>Engine</div>
+        <div class="arrow-line"></div>
+        <div class="arrow-head"></div>
+      </div>
+
+      <div class="match-panel reveal reveal-delay-2">
+        <div class="match-panel-head">
+          <span>📌</span> Open Tasks
+        </div>
+        <div class="task-card">
+          <div class="task-top">
+            <div class="task-name">Medical aid — Sector 4</div>
+            <span class="task-urgency" style="background:rgba(230,51,41,.12);color:var(--red)">CRITICAL</span>
+          </div>
+          <div class="task-meta">Needs: Medical · Match: <strong style="color:var(--green)">Rohit 97%</strong></div>
+        </div>
+        <div class="task-card">
+          <div class="task-top">
+            <div class="task-name">Food distribution — Zone 2</div>
+            <span class="task-urgency" style="background:rgba(240,124,43,.12);color:var(--orange)">MODERATE</span>
+          </div>
+          <div class="task-meta">Needs: Logistics · Match: <strong style="color:var(--green)">Asha 91%</strong></div>
+        </div>
+        <div class="task-card">
+          <div class="task-top">
+            <div class="task-name">Child education — Camp B</div>
+            <span class="task-urgency" style="background:rgba(31,101,212,.1);color:var(--blue)">PLANNED</span>
+          </div>
+          <div class="task-meta">Needs: Teaching · Match: <strong style="color:var(--green)">Priya 88%</strong></div>
+        </div>
+        <div class="task-card">
+          <div class="task-top">
+            <div class="task-name">Mental health outreach — Sector 7</div>
+            <span class="task-urgency" style="background:rgba(240,124,43,.12);color:var(--orange)">MODERATE</span>
+          </div>
+          <div class="task-meta">Needs: Counseling · Match: <strong style="color:var(--green)">Dev 85%</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRISIS MODE -->
+<section class="crisis-section" id="crisis">
+  <div class="crisis-bg-text">CRISIS</div>
+  <div class="crisis-inner">
+    <div class="section-label reveal" style="color:var(--red)">Emergency Simulator</div>
+    <h2 class="section-title reveal" style="color:#fff">Crisis Mode.<br>System Adapts.</h2>
+    <div class="crisis-grid">
+      <div class="reveal">
+        <button class="crisis-trigger-btn" id="crisisTriggerBtn" onclick="triggerCrisis()">
+          ⚡ Trigger Crisis Event
+        </button>
+        <div class="crisis-timeline" id="crisisTimeline">
+          <div class="timeline-item">
+            <div class="tl-dot" style="background:rgba(255,255,255,.1)">🌊</div>
+            <div class="tl-content">
+              <div class="tl-title">System Idle</div>
+              <div class="tl-desc">Monitoring 12 active issues. All volunteers deployed normally.</div>
+              <div class="tl-time">Awaiting trigger...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="crisis-metrics reveal reveal-delay-1">
+        <div class="crisis-metrics" id="crisisMetricsGrid">
+          <div class="crisis-metric">
+            <div class="cm-label">Active Issues</div>
+            <div class="cm-val" id="cmIssues" style="color:#fff">12</div>
+            <div class="cm-change" style="color:rgba(255,255,255,.4)">Baseline</div>
+          </div>
+          <div class="crisis-metric">
+            <div class="cm-label">Volunteers</div>
+            <div class="cm-val" id="cmVols" style="color:#fff">8</div>
+            <div class="cm-change" style="color:rgba(255,255,255,.4)">Deployed</div>
+          </div>
+          <div class="crisis-metric">
+            <div class="cm-label">Response Time</div>
+            <div class="cm-val" id="cmResp" style="color:#fff">18m</div>
+            <div class="cm-change" style="color:rgba(255,255,255,.4)">Avg</div>
+          </div>
+          <div class="crisis-metric">
+            <div class="cm-label">Coverage</div>
+            <div class="cm-val" id="cmCov" style="color:var(--green)">91%</div>
+            <div class="cm-change" style="color:rgba(255,255,255,.4)">Area</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYTICS -->
+<section class="analytics-section" id="analytics">
+  <div class="analytics-inner">
+    <div class="section-label reveal">Impact Dashboard</div>
+    <h2 class="section-title reveal" style="color:var(--ink)">Numbers That<br>Actually Matter</h2>
+    <div class="metrics-row reveal reveal-delay-1">
+      <div class="metric-card">
+        <div class="mc-val">1,482</div>
+        <div class="mc-label">Issues Resolved</div>
+        <div class="mc-delta up">↑ 34% this week</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-val">247</div>
+        <div class="mc-label">Active Volunteers</div>
+        <div class="mc-delta up">↑ 18 new today</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-val">11m</div>
+        <div class="mc-label">Avg Response Time</div>
+        <div class="mc-delta up">↓ 39% faster</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-val">61</div>
+        <div class="mc-label">NGOs Onboarded</div>
+        <div class="mc-delta up">↑ 8 this month</div>
+      </div>
+    </div>
+    <div class="analytics-grid reveal reveal-delay-2">
+      <div class="chart-card">
+        <div class="chart-title">Issues Resolved — Last 7 Days</div>
+        <div class="chart-sub">Comparison: before vs after AidPulse</div>
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Issue Breakdown</div>
+        <div class="chart-sub">By severity level</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" viewBox="0 0 120 120" id="donutSvg"></svg>
+          <div class="donut-legend">
+            <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><span>Critical — 22%</span></div>
+            <div class="dl-item"><div class="dl-dot" style="background:var(--orange)"></div><span>Moderate — 45%</span></div>
+            <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><span>Low — 33%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="compare-section" id="compare">
+  <div class="compare-inner">
+    <div class="section-label reveal" style="color:var(--red)">Before vs After</div>
+    <h2 class="section-title reveal" style="color:#fff">The Difference<br>Is Visible</h2>
+    <div class="compare-grid reveal reveal-delay-1">
+      <div class="compare-col">
+        <div class="compare-head without-head">❌ Without AidPulse</div>
+        <div class="compare-body">
+          <div class="compare-item"><div class="compare-icon">😰</div><div class="compare-text">Scattered spreadsheets and paper records</div></div>
+          <div class="compare-item"><div class="compare-icon">❓</div><div class="compare-text">No way to identify urgent needs quickly</div></div>
+          <div class="compare-item"><div class="compare-icon">📵</div><div class="compare-text">Volunteers operate without coordination</div></div>
+          <div class="compare-item"><div class="compare-icon">🚫</div><div class="compare-text">Crisis response is slow and chaotic</div></div>
+          <div class="compare-item"><div class="compare-icon">📉</div><div class="compare-text">No measurable impact tracking</div></div>
+          <div class="compare-item"><div class="compare-icon">⏱</div><div class="compare-text">Avg 45min response time per crisis</div></div>
+        </div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head with-head">✅ With AidPulse</div>
+        <div class="compare-body">
+          <div class="compare-item good"><div class="compare-icon">✅</div><div class="compare-text">Centralized, real-time data from all sources</div></div>
+          <div class="compare-item good"><div class="compare-icon">🎯</div><div class="compare-text">AI-scored priority queue, always current</div></div>
+          <div class="compare-item good"><div class="compare-icon">🤝</div><div class="compare-text">Optimal volunteer matched in seconds</div></div>
+          <div class="compare-item good"><div class="compare-icon">⚡</div><div class="compare-text">Crisis mode deploys in under 200ms</div></div>
+          <div class="compare-item good"><div class="compare-icon">📊</div><div class="compare-text">Full analytics dashboard, exportable</div></div>
+          <div class="compare-item good"><div class="compare-icon">🚀</div><div class="compare-text">Avg 11min response time — 3.2× faster</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <div class="section-label">Get Started</div>
+    <h2 class="cta-title">Deploy AidPulse<br>for Your NGO</h2>
+    <p class="cta-sub">Join 61 organizations already transforming how they respond to critical needs. Free pilot program available.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn-white">Request a Demo →</a>
+      <a href="#" class="btn-outline-white">See Case Studies</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Aid<span>Pulse</span></div>
+    <div class="footer-note">NGO Intelligence & Volunteer Command Platform · Built for real-world impact</div>
+  </div>
+</footer>
+
+<script>
+// ── MAP SIMULATION ──────────────────────────────────────────────
+const canvas = document.getElementById('mapCanvas');
+
+const issueData = [
+  {id:1, x:18, y:25, type:'critical', label:'Flood Zone A'},
+  {id:2, x:55, y:18, type:'critical', label:'Medical Crisis'},
+  {id:3, x:75, y:55, type:'moderate', label:'Food Shortage'},
+  {id:4, x:35, y:65, type:'moderate', label:'Water Access'},
+  {id:5, x:65, y:80, type:'low', label:'Shelter Need'},
+  {id:6, x:22, y:80, type:'low', label:'Education Gap'},
+  {id:7, x:88, y:30, type:'critical', label:'Health Outbreak'},
+  {id:8, x:48, y:42, type:'moderate', label:'Supply Chain'},
+];
+
+const volData = [
+  {id:1, x:20, y:45, target:1},
+  {id:2, x:58, y:35, target:2},
+  {id:3, x:70, y:65, target:3},
+  {id:4, x:30, y:55, target:4},
+  {id:5, x:80, y:75, target:5},
+];
+
+let crisisMode = false;
+let markers = {};
+let volunteers = {};
+
+function createMarker(issue) {
+  const el = document.createElement('div');
+  el.className = `marker ${issue.type}`;
+  el.style.left = issue.x + '%';
+  el.style.top = issue.y + '%';
+  el.innerHTML = `<div class="marker-ring"></div><div class="marker-core"></div>`;
+  el.style.animationDelay = Math.random() * 1.5 + 's';
+  canvas.appendChild(el);
+  markers[issue.id] = el;
+}
+
+function createVolunteer(vol) {
+  const el = document.createElement('div');
+  el.className = 'volunteer';
+  el.style.left = vol.x + '%';
+  el.style.top = vol.y + '%';
+  el.innerHTML = `<div class="vol-trail"></div><div class="vol-dot"></div>`;
+  canvas.appendChild(el);
+  volunteers[vol.id] = el;
+}
+
+issueData.forEach(createMarker);
+volData.forEach(createVolunteer);
+
+// Move volunteers around
+function moveVolunteers() {
+  volData.forEach(vol => {
+    const target = issueData[vol.target - 1];
+    const jitterX = (Math.random() - 0.5) * 6;
+    const jitterY = (Math.random() - 0.5) * 6;
+    volunteers[vol.id].style.left = Math.min(95,Math.max(5,target.x + jitterX)) + '%';
+    volunteers[vol.id].style.top = Math.min(92,Math.max(8,target.y + jitterY)) + '%';
+    vol.target = (vol.target % issueData.length) + 1;
+  });
+}
+setInterval(moveVolunteers, 3500);
+
+function setMode(mode) {
+  crisisMode = mode === 'crisis';
+  document.getElementById('crisisFlash').classList.toggle('on', crisisMode);
+  document.getElementById('btnNormal').classList.toggle('active', !crisisMode);
+  document.getElementById('btnCrisis').classList.toggle('active', crisisMode);
+  document.getElementById('hudMode').innerHTML = `Mode: <span style="color:${crisisMode?'var(--red)':'#fff'}">${crisisMode?'CRISIS':'Normal'}</span>`;
+
+  if (crisisMode) {
+    // Add extra critical markers
+    for (let i = 0; i < 4; i++) {
+      const ex = {id: 100+i, x: 10+Math.random()*80, y: 10+Math.random()*75, type:'critical'};
+      createMarker(ex);
+    }
+    document.getElementById('hudIssues').textContent = '28';
+  } else {
+    // Remove extra
+    canvas.querySelectorAll('.marker').forEach((m,i) => { if (i >= issueData.length) m.remove(); });
+    document.getElementById('hudIssues').textContent = '12';
+  }
+}
+
+function optimizeRoutes() {
+  const btn = document.getElementById('btnOptimize');
+  btn.textContent = 'Optimizing...';
+  btn.classList.add('active');
+  setTimeout(() => {
+    volData.forEach(vol => {
+      // Snap directly to nearest issue
+      const nearest = issueData.reduce((a,b) => {
+        const da = Math.hypot(vol.x-a.x,vol.y-a.y);
+        const db = Math.hypot(vol.x-b.x,vol.y-b.y);
+        return da < db ? a : b;
+      });
+      volunteers[vol.id].style.left = nearest.x + '%';
+      volunteers[vol.id].style.top = nearest.y + '%';
+    });
+    btn.textContent = 'Optimize Routes ✦';
+    btn.classList.remove('active');
+  }, 1200);
+}
+
+// ── PRIORITY ISSUE LIST ─────────────────────────────────────────
+const issues = [
+  {name:'Flood displacement',loc:'Ward 7, Sector 3',score:94,level:'Critical',color:getComputedStyle(document.documentElement).getPropertyValue('--red').trim()||'#e63329'},
+  {name:'Medical supply shortage',loc:'District Hospital',score:87,level:'Critical',color:'#e63329'},
+  {name:'Water contamination',loc:'Village Block D',score:72,level:'Moderate',color:'#f07c2b'},
+  {name:'Food ration deficit',loc:'Refugee Camp 2',score:65,level:'Moderate',color:'#f07c2b'},
+  {name:'Shelter damage',loc:'North Zone',score:44,level:'Moderate',color:'#f07c2b'},
+  {name:'Education disruption',loc:'School Block C',score:28,level:'Low',color:'#1a9e5c'},
+];
+
+function renderIssues() {
+  const list = document.getElementById('issueList');
+  // Randomly fluctuate scores
+  issues.forEach(iss => { iss.score = Math.max(10, Math.min(99, iss.score + (Math.random()-0.5)*6|0)); });
+  issues.sort((a,b) => b.score - a.score);
+  list.innerHTML = issues.map(iss => `
+    <div class="issue-row">
+      <div class="issue-sev" style="background:${iss.color}"></div>
+      <div style="flex:1">
+        <div class="issue-name">${iss.name}</div>
+        <div class="issue-loc">${iss.loc}</div>
+      </div>
+      <div class="issue-bar-wrap">
+        <div class="issue-bar" style="width:${iss.score}%;background:${iss.color}"></div>
+      </div>
+      <div class="issue-score" style="color:${iss.color}">${iss.score}</div>
+      <div class="issue-label" style="background:${iss.color}22;color:${iss.color}">${iss.level}</div>
+    </div>
+  `).join('');
+}
+renderIssues();
+setInterval(renderIssues, 2800);
+
+// ── CRISIS TRIGGER ──────────────────────────────────────────────
+let crisisTriggered = false;
+function triggerCrisis() {
+  if (crisisTriggered) return;
+  crisisTriggered = true;
+  const btn = document.getElementById('crisisTriggerBtn');
+  btn.textContent = '🌊 CRISIS ACTIVE — System Adapting...';
+  btn.style.background = '#c42a20';
+
+  const tl = document.getElementById('crisisTimeline');
+  const events = [
+    {icon:'🌊', title:'Flood emergency triggered', desc:'47 new reports incoming from Sector 4, 6, and 9.', t:'T+0:00', color:'var(--red)'},
+    {icon:'🧠', title:'AI re-prioritizing queue', desc:'Scoring 47 new issues against existing 12. Critical count: 18 → 31.', t:'T+0:03', color:'var(--orange)'},
+    {icon:'🤝', title:'Re-assigning volunteers', desc:'6 of 8 volunteers redirected. New matches computed in 180ms.', t:'T+0:08', color:'#1f65d4'},
+    {icon:'📣', title:'Push alerts sent', desc:'247 volunteers notified. 19 new volunteers accepted deployment.', t:'T+0:15', color:'#7c3aed'},
+    {icon:'✅', title:'Coverage restored to 89%', desc:'Bottleneck detected in Zone 6. Escalating to reserve team.', t:'T+0:31', color:'var(--green)'},
+  ];
+
+  let i = 0;
+  tl.innerHTML = '';
+  function addEvent() {
+    if (i >= events.length) return;
+    const e = events[i];
+    const item = document.createElement('div');
+    item.className = 'timeline-item';
+    item.style.opacity = '0';
+    item.style.transform = 'translateX(-12px)';
+    item.style.transition = 'all .5s ease';
+    item.innerHTML = `
+      <div class="tl-dot" style="background:${e.color}22;font-size:.9rem">${e.icon}</div>
+      <div class="tl-content">
+        <div class="tl-title" style="color:${e.color}">${e.title}</div>
+        <div class="tl-desc">${e.desc}</div>
+        <div class="tl-time">${e.t}</div>
+      </div>`;
+    tl.appendChild(item);
+    requestAnimationFrame(() => {
+      item.style.opacity = '1';
+      item.style.transform = 'translateX(0)';
+    });
+
+    // Update metrics
+    const metricUpdates = [
+      {issues:'47', vols:'19', resp:'—', cov:'34%', respCol:'rgba(255,255,255,.4)', covCol:'var(--red)'},
+      {issues:'47', vols:'19', resp:'—', cov:'34%', respCol:'rgba(255,255,255,.4)', covCol:'var(--red)'},
+      {issues:'31', vols:'27', resp:'—', cov:'67%', respCol:'rgba(255,255,255,.4)', covCol:'var(--orange)'},
+      {issues:'31', vols:'27', resp:'—', cov:'78%', respCol:'rgba(255,255,255,.4)', covCol:'var(--orange)'},
+      {issues:'18', vols:'27', resp:'8m', cov:'89%', respCol:'var(--green)', covCol:'var(--green)'},
+    ];
+    const m = metricUpdates[Math.min(i, metricUpdates.length-1)];
+    document.getElementById('cmIssues').textContent = m.issues;
+    document.getElementById('cmVols').textContent = m.vols;
+    document.getElementById('cmResp').textContent = m.resp;
+    document.getElementById('cmCov').textContent = m.cov;
+    document.getElementById('cmCov').style.color = m.covCol;
+    document.getElementById('cmResp').style.color = m.respCol;
+
+    i++;
+    if (i < events.length) setTimeout(addEvent, 1800);
+  }
+  setTimeout(addEvent, 400);
+}
+
+// ── BAR CHART ───────────────────────────────────────────────────
+const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const withoutData = [32, 28, 35, 30, 26, 22, 18];
+const withData = [68, 82, 79, 91, 88, 95, 104];
+
+const barChart = document.getElementById('barChart');
+days.forEach((day, i) => {
+  const wrap = document.createElement('div');
+  wrap.className = 'bar-wrap';
+  const maxH = 120;
+  const h1 = Math.round((withoutData[i]/110)*maxH);
+  const h2 = Math.round((withData[i]/110)*maxH);
+  wrap.innerHTML = `
+    <div style="display:flex;gap:3px;align-items:flex-end;height:${maxH}px">
+      <div class="bar" style="height:${h1}px;background:rgba(255,255,255,.15);flex:1" title="Without: ${withoutData[i]}"></div>
+      <div class="bar" style="height:${h2}px;background:var(--red);flex:1" title="With: ${withData[i]}"></div>
+    </div>
+    <div class="bar-label">${day}</div>
+  `;
+  barChart.appendChild(wrap);
+});
+
+// ── DONUT CHART ─────────────────────────────────────────────────
+const donut = document.getElementById('donutSvg');
+const segments = [{pct:22,col:'#e63329'},{pct:45,col:'#f07c2b'},{pct:33,col:'#1a9e5c'}];
+let cumulative = 0;
+const r = 40, cx = 60, cy = 60, circ = 2*Math.PI*r;
+segments.forEach(seg => {
+  const offset = circ - (seg.pct/100)*circ;
+  const rotate = (cumulative/100)*360;
+  const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  circle.setAttribute('cx',cx); circle.setAttribute('cy',cy); circle.setAttribute('r',r);
+  circle.setAttribute('fill','none'); circle.setAttribute('stroke',seg.col);
+  circle.setAttribute('stroke-width','18');
+  circle.setAttribute('stroke-dasharray',circ);
+  circle.setAttribute('stroke-dashoffset',offset);
+  circle.setAttribute('transform',`rotate(${rotate-90} ${cx} ${cy})`);
+  donut.appendChild(circle);
+  cumulative += seg.pct;
+});
+// Center hole
+const hole = document.createElementNS('http://www.w3.org/2000/svg','circle');
+hole.setAttribute('cx',cx); hole.setAttribute('cy',cy); hole.setAttribute('r','28');
+hole.setAttribute('fill','white');
+donut.appendChild(hole);
+
+// ── SCROLL REVEAL ───────────────────────────────────────────────
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:0.15});
+revealEls.forEach(el => observer.observe(el));
+
+// ── COUNTER ANIMATION ───────────────────────────────────────────
+function animateCounter(el, target, duration) {
+  let start = 0;
+  const step = target / (duration / 16);
+  const interval = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = Math.round(start).toLocaleString();
+    if (start >= target) clearInterval(interval);
+  }, 16);
+}
+setTimeout(() => animateCounter(document.getElementById('counter-issues'), 2847, 2000), 600);
+</script>
+</body>
+</html>
