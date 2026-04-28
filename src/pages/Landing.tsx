@@ -21,6 +21,7 @@ import { useApp } from '../context/AppContext';
 import SahayetaMap from '../components/map/SahayetaMap';
 import { rankVolunteers } from '../lib/matching';
 import { supabase } from '../lib/supabase';
+import { GeminiInsights } from '../components/dashboard/GeminiInsights';
 import { 
   Brain, 
   CheckCircle2, 
@@ -1186,6 +1187,10 @@ export function Landing() {
                   })}
                 </div>
               </div>
+            </div>
+
+            <div style={{ maxWidth: '800px', margin: '40px auto 0' }}>
+              <GeminiInsights tasks={demoNGOTasks} />
             </div>
 
             {/* MATCH BUTTON + RESULT */}
