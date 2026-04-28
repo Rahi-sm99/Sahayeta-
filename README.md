@@ -16,8 +16,8 @@
 
 ## 🌐 Project Links
 
-*   **Live Website**: [Coming Soon / To be attached]
-*   **Mobile App (APK)**: [Download Release APK / To be attached]
+*   **Live Website**: (https://sahayeta.vercel.app/)
+*   **Mobile App (APK)**: (https://drive.google.com/file/d/1E2VoCFuamkrlXbc7qpWXE-NYj5sx46T8/view?usp=drive_link)
 
 ---
 
