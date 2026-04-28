@@ -97,55 +97,65 @@ export function Landing() {
   ];
 
   // Demo NGO tasks for the logged-out matching panel (rich descriptions)
-  const demoNGOTasks = [
+  const demoNGOTasks: Task[] = [
     {
-      id: 'NGO-001',
-      ngoName: 'Health First NGO',
+      task_id: 'NGO-001',
+      ngo_name: 'Health First NGO',
       location: 'Delhi, Zone A',
-      description: 'Emergency medical aid for flood-affected families. Volunteer doctors and first-aiders needed for on-ground vaccination drives.',
-      requiredDays: ['All Days', 'Immediate'],
-      requiredSkills: ['Medical', 'First Aid'],
+      requirements: 'Emergency medical aid for flood-affected families. Volunteer doctors and first-aiders needed for on-ground vaccination drives.',
+      required_days: ['All Days', 'Immediate'],
+      required_skills: ['Medical', 'First Aid'],
       priority: 'Critical',
+      severity_score: 95,
+      status: 'open',
       latitude: 28.6139, longitude: 77.2090
     },
     {
-      id: 'NGO-002',
-      ngoName: 'Teach Mission',
+      task_id: 'NGO-002',
+      ngo_name: 'Teach Mission',
       location: 'Mumbai, Zone B',
-      description: 'Post-disaster educational support & rescue coordination for displaced children in relief camps. Involve structured learning sessions.',
-      requiredDays: ['Weekends', 'Mon-Fri'],
-      requiredSkills: ['Teaching', 'Rescue'],
+      requirements: 'Post-disaster educational support & rescue coordination for displaced children in relief camps. Involve structured learning sessions.',
+      required_days: ['Weekends', 'Mon-Fri'],
+      required_skills: ['Teaching', 'Rescue'],
       priority: 'High',
+      severity_score: 85,
+      status: 'open',
       latitude: 19.0760, longitude: 72.8777
     },
     {
-      id: 'NGO-003',
-      ngoName: 'Green Earth',
+      task_id: 'NGO-003',
+      ngo_name: 'Green Earth',
       location: 'Bangalore, Zone C',
-      description: 'Water purification and sanitation management in under-resourced colonies. Manual labor and technical know-how required.',
-      requiredDays: ['Mon-Fri'],
-      requiredSkills: ['Sanitation', 'Water'],
+      requirements: 'Water purification and sanitation management in under-resourced colonies. Manual labor and technical know-how required.',
+      required_days: ['Mon-Fri'],
+      required_skills: ['Sanitation', 'Water'],
       priority: 'Medium',
+      severity_score: 65,
+      status: 'open',
       latitude: 12.9716, longitude: 77.5946
     },
     {
-      id: 'NGO-004',
-      ngoName: 'Food For All',
+      task_id: 'NGO-004',
+      ngo_name: 'Food For All',
       location: 'Kolkata, Zone D',
-      description: 'Dry ration distribution and logistics management for 2,000+ families. Truck loading, routing, and inventory tracking required.',
-      requiredDays: ['All Days'],
-      requiredSkills: ['Logistics', 'Cooking'],
+      requirements: 'Dry ration distribution and logistics management for 2,000+ families. Truck loading, routing, and inventory tracking required.',
+      required_days: ['All Days'],
+      required_skills: ['Logistics', 'Cooking'],
       priority: 'High',
+      severity_score: 80,
+      status: 'open',
       latitude: 22.5726, longitude: 88.3639
     },
     {
-      id: 'NGO-005',
-      ngoName: 'Shelter Plus',
+      task_id: 'NGO-005',
+      ngo_name: 'Shelter Plus',
       location: 'Chennai, Zone E',
-      description: 'Temporary housing construction and maintenance support for cyclone survivors. Shelter building, repair, and camp management.',
-      requiredDays: ['Immediate', 'Weekends'],
-      requiredSkills: ['Shelter', 'First Aid'],
+      requirements: 'Temporary housing construction and maintenance support for cyclone survivors. Shelter building, repair, and camp management.',
+      required_days: ['Immediate', 'Weekends'],
+      required_skills: ['Shelter', 'First Aid'],
       priority: 'Medium',
+      severity_score: 70,
+      status: 'open',
       latitude: 13.0827, longitude: 80.2707
     }
   ];
@@ -271,7 +281,7 @@ export function Landing() {
     setSimComplete(false);
     setIsLiveSimulating(false);
 
-    const task = demoNGOTasks.find(t => t.id === demoSelectedTask);
+    const task = demoNGOTasks.find(t => t.task_id === demoSelectedTask);
     if (!task) return;
 
     let step = 0;
@@ -282,7 +292,7 @@ export function Landing() {
         clearInterval(stepInterval);
         // Score each volunteer by skill match + inverse distance
         const scored = publicMockVolunteers.map(v => {
-          const skillMatch = task.requiredSkills.filter(s => (v.skills as string[]).includes(s)).length / task.requiredSkills.length;
+          const skillMatch = task.required_skills.filter(s => (v.skills as string[]).includes(s)).length / task.required_skills.length;
           const dist = haversine(v.latitude!, v.longitude!, task.latitude, task.longitude);
           const distScore = Math.max(0, 1 - dist / 5000);
           const score = Math.round((skillMatch * 0.6 + distScore * 0.4) * 100);
@@ -1154,16 +1164,16 @@ export function Landing() {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {demoNGOTasks.map(task => {
-                    const isSelected = demoSelectedTask === task.id;
-                    const isExpanded = expandedTaskId === task.id;
+                    const isSelected = demoSelectedTask === task.task_id;
+                    const isExpanded = expandedTaskId === task.task_id;
                     const pColor = task.priority === 'Critical' ? '#ff5c7a' : task.priority === 'High' ? '#ffb84d' : '#7ed957';
                     return (
-                      <div key={task.id} className={`match-item ${isExpanded ? 'expanded' : ''}`} style={{ borderRadius: '14px', border: `1px solid ${isSelected ? 'var(--primary)' : isExpanded ? '#333' : '#1a1a1a'}`, background: isSelected ? 'rgba(255,153,51,0.06)' : 'rgba(255,255,255,0.02)', overflow: 'hidden' }}>
+                      <div key={task.task_id} className={`match-item ${isExpanded ? 'expanded' : ''}`} style={{ borderRadius: '14px', border: `1px solid ${isSelected ? 'var(--primary)' : isExpanded ? '#333' : '#1a1a1a'}`, background: isSelected ? 'rgba(255,153,51,0.06)' : 'rgba(255,255,255,0.02)', overflow: 'hidden' }}>
                         <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
-                          onClick={() => { setExpandedTaskId(isExpanded ? null : task.id); setDemoSelectedTask(task.id); setDemoMatchResult(null); }}>
+                          onClick={() => { setExpandedTaskId(isExpanded ? null : task.task_id); setDemoSelectedTask(task.task_id); setDemoMatchResult(null); }}>
                           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: pColor, flexShrink: 0, boxShadow: `0 0 8px ${pColor}` }} />
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontWeight: 500, fontSize: '0.9rem' }}>{task.ngoName}</div>
+                            <div style={{ fontWeight: 500, fontSize: '0.9rem' }}>{task.ngo_name}</div>
                             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{task.location}</div>
                           </div>
                           <span style={{ fontSize: '0.6rem', fontWeight: 800, color: pColor, border: `1px solid ${pColor}33`, background: `${pColor}11`, borderRadius: '6px', padding: '2px 8px' }}>{task.priority}</span>
@@ -1171,10 +1181,10 @@ export function Landing() {
                         </div>
                         {isExpanded && (
                           <div className="animate-fade-in" style={{ padding: '0 16px 14px', borderTop: '1px solid #1a1a1a', paddingTop: '12px' }}>
-                            <p style={{ fontSize: '0.78rem', color: '#aaa', marginBottom: '10px', lineHeight: 1.5 }}>{task.description}</p>
+                            <p style={{ fontSize: '0.78rem', color: '#aaa', marginBottom: '10px', lineHeight: 1.5 }}>{task.requirements}</p>
                             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '0.7rem' }}>
-                              <div><span style={{ color: 'var(--text-muted)' }}>Required Days: </span>{task.requiredDays.map(d => <span key={d} style={{ background: 'rgba(255,153,51,0.1)', color: 'var(--primary)', borderRadius: '4px', padding: '1px 8px', marginRight: '4px' }}>{d}</span>)}</div>
-                              <div style={{ marginTop: '6px' }}><span style={{ color: 'var(--text-muted)' }}>Skills Needed: </span>{task.requiredSkills.map(s => <span key={s} style={{ background: 'rgba(255,92,122,0.1)', color: '#ff9999', borderRadius: '4px', padding: '1px 8px', marginRight: '4px' }}>{s}</span>)}</div>
+                              <div><span style={{ color: 'var(--text-muted)' }}>Required Days: </span>{task.required_days.map(d => <span key={d} style={{ background: 'rgba(255,153,51,0.1)', color: 'var(--primary)', borderRadius: '4px', padding: '1px 8px', marginRight: '4px' }}>{d}</span>)}</div>
+                              <div style={{ marginTop: '6px' }}><span style={{ color: 'var(--text-muted)' }}>Skills Needed: </span>{task.required_skills.map(s => <span key={s} style={{ background: 'rgba(255,92,122,0.1)', color: '#ff9999', borderRadius: '4px', padding: '1px 8px', marginRight: '4px' }}>{s}</span>)}</div>
                             </div>
                           </div>
                         )}
@@ -1231,10 +1241,10 @@ export function Landing() {
                     </div>
                     <div className="glass-card" style={{ padding: '20px', border: '1px solid rgba(255,153,51,0.4)', textAlign: 'center' }}>
                       <MapPin size={28} style={{ color: 'var(--primary)', marginBottom: '8px' }} />
-                      <div style={{ fontWeight: 900, fontSize: '1rem', marginBottom: '4px' }}>{demoMatchResult.task.ngoName}</div>
+                      <div style={{ fontWeight: 900, fontSize: '1rem', marginBottom: '4px' }}>{demoMatchResult.task.ngo_name}</div>
                       <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginBottom: '8px' }}>{demoMatchResult.task.location}</div>
                       <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                        {demoMatchResult.task.requiredSkills.map(s => <span key={s} style={{ background: 'rgba(255,153,51,0.15)', color: 'var(--primary)', borderRadius: '4px', padding: '1px 8px', fontSize: '0.6rem' }}>{s}</span>)}
+                        {demoMatchResult.task.required_skills.map(s => <span key={s} style={{ background: 'rgba(255,153,51,0.15)', color: 'var(--primary)', borderRadius: '4px', padding: '1px 8px', fontSize: '0.6rem' }}>{s}</span>)}
                       </div>
                     </div>
                   </div>
@@ -1332,7 +1342,7 @@ export function Landing() {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {displayTasks.filter(t => t.status === 'open').map(t => (
-                        <div key={t.task_id || t.id} className="glass-card" style={{ padding: '15px', cursor: 'pointer', border: '1px solid #111' }} onClick={() => handleMatch(t.task_id || t.id)}>
+                        <div key={t.task_id} className="glass-card" style={{ padding: '15px', cursor: 'pointer', border: '1px solid #111' }} onClick={() => handleMatch(t.task_id)}>
                           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ fontWeight: 800 }}>{t.ngo_name}</span>
                             <span className="badge yellow">{t.priority}</span>
@@ -1393,7 +1403,7 @@ export function Landing() {
                 </>
               )}
 
-              {/* Simulation markers - Using displayTasks and displayVolunteers (Names, not IDs) */}
+              {/* Simulation markers - Using displayTasks and displayVolunteers */}
               {(!isAdmin && !isVolunteer) && demoNGOTasks.slice(0, 5).map((task, i) => {
                 const lat = task.latitude || (20 + (i * 2) % 10);
                 const lon = task.longitude || (75 + (i * 3) % 10);
@@ -1402,10 +1412,10 @@ export function Landing() {
                 const pColor = task.priority === 'Critical' ? '#ff5c7a' : task.priority === 'High' ? '#ffb84d' : '#7ed957';
                 
                 return (
-                  <div key={task.id} style={{ position: 'absolute', left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)', zIndex: 20 }}>
+                  <div key={task.task_id} style={{ position: 'absolute', left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)', zIndex: 20 }}>
                     <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: pColor, boxShadow: `0 0 15px ${pColor}`, animation: 'simPulseGen 2s infinite' }} />
                     <div style={{ position: 'absolute', top: '120%', left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', background: 'rgba(15,15,20,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '100px', padding: '4px 12px', fontSize: '0.7rem', color: '#fff', marginTop: '6px', fontWeight: 500 }}>
-                      {task.ngoName}
+                      {task.ngo_name}
                     </div>
                   </div>
                 );
@@ -1421,7 +1431,7 @@ export function Landing() {
                 const y = 100 - ((lat - 6.5) / (35.5 - 6.5)) * 100;
                 
                 return (
-                  <div key={v.id || v.volunteer_id} style={{ position: 'absolute', left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)', zIndex: 15 }}>
+                  <div key={v.volunteer_id} style={{ position: 'absolute', left: `${x}%`, top: `${y}%`, transform: 'translate(-50%, -50%)', zIndex: 15 }}>
                     <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 600, color: '#000', boxShadow: '0 0 12px rgba(255,255,255,0.3)' }}>
                       {v.name.substring(0, 1)}
                     </div>
