@@ -52,8 +52,8 @@
 
 ## 👥 The Team
 
-*   **Spandan Mondal** - System Architecture & AI Intelligence
-*   **Srinjay** - Full Stack Development & Mobile Integration
+*   **Spandan Mondal** - Full Stack Development and Mobile Interface.
+*   **Srinjay Das** - System Architecture & AI Intelligence
 
 ---
 
