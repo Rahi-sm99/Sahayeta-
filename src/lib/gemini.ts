@@ -2,10 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { haversineKm } from './geo';
 
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 /**
- * Generates strategic crisis insights using Gemini 2.0 Flash.
+ * Generates strategic crisis insights using Gemini 1.5 Flash.
  * This function works ALONGSIDE the algorithmic matching engine (rankVolunteers)
  */
 export async function generateCrisisInsights(tasks: any[]) {

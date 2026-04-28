@@ -39,12 +39,12 @@ export function GeminiInsights({ tasks }: { tasks: any[] }) {
       {loading ? (
         <div style={{ padding: '20px', textAlign: 'center' }}>
           <Sparkles className="animate-pulse" size={24} color="var(--primary)" style={{ marginBottom: '10px' }} />
-          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Gemini 2.0 analyzing {tasks.length} missions...</div>
+          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Gemini 1.5 analyzing {tasks.length} missions...</div>
         </div>
       ) : !hasLoaded ? (
         <div style={{ padding: '16px', textAlign: 'center' }}>
           <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
-            Click <strong style={{ color: 'var(--primary)' }}>GENERATE</strong> to run Gemini 2.0 AI analysis on {tasks.length} active missions.
+            Click <strong style={{ color: 'var(--primary)' }}>GENERATE</strong> to run Gemini 1.5 AI analysis on {tasks.length} active missions.
           </p>
         </div>
       ) : (
@@ -70,7 +70,7 @@ export function GeminiInsights({ tasks }: { tasks: any[] }) {
 
       <div style={{ marginTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '10px', display: 'flex', justifyContent: 'flex-end' }}>
         <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Sparkles size={10} /> POWERED BY GOOGLE GEMINI 2.0 FLASH
+          <Sparkles size={10} /> POWERED BY GOOGLE GEMINI 1.5 FLASH
         </span>
       </div>
     </div>
