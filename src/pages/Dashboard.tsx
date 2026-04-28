@@ -7,7 +7,7 @@ import { CrisisPanel } from '../components/crisis/CrisisPanel';
 import { CrisisTimeline } from '../components/crisis/CrisisTimeline';
 import SahayetaMap from '../components/map/SahayetaMap';
 import { useApp } from '../context/AppContext';
-
+import { GeminiInsights } from '../components/dashboard/GeminiInsights';
 
 import { useRealtimeTasks } from '../hooks/useRealtimeTasks';
 import { useRealtimeVolunteers } from '../hooks/useRealtimeVolunteers';
@@ -32,7 +32,7 @@ export function Dashboard() {
           <div style={{ padding: '16px', borderBottom: '1px solid var(--border-default)', background: 'var(--bg-base)' }}>
             <CrisisPanel />
             <CrisisTimeline />
-
+            <GeminiInsights tasks={tasks} />
           </div>
           <div style={{ flex: 1, overflow: 'hidden' }}>
             <UrgencyQueue />
