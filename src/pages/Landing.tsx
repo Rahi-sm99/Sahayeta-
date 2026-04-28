@@ -83,11 +83,11 @@ export function Landing() {
   ];
 
   const publicMockVolunteers: Volunteer[] = [
-    { volunteer_id: 'V-001', name: 'Rahul Sharma', email: 'rahul@demo.com', skills: ['Medical', 'First Aid'], availability: 'All Days', experience_years: 5, status: 'available', latitude: 8.5241, longitude: 76.9366 }, // Trivandrum (South)
-    { volunteer_id: 'V-002', name: 'Priya Singh', email: 'priya@demo.com', skills: ['Rescue', 'Logistics'], availability: 'Weekends', experience_years: 3, status: 'available', latitude: 34.0837, longitude: 74.7973 }, // Srinagar (North)
-    { volunteer_id: 'V-003', name: 'Amit Patel', email: 'amit@demo.com', skills: ['Sanitation', 'Water'], availability: 'Mon-Fri', experience_years: 4, status: 'available', latitude: 23.0225, longitude: 72.5714 }, // Ahmedabad (West)
-    { volunteer_id: 'V-004', name: 'Sneha Rao', email: 'sneha@demo.com', skills: ['Shelter', 'Cooking'], availability: 'Immediate', experience_years: 2, status: 'available', latitude: 26.1445, longitude: 91.7362 }, // Guwahati (East)
-    { volunteer_id: 'V-005', name: 'Vikram Das', email: 'vikram@demo.com', skills: ['Rescue', 'Medical'], availability: 'All Days', experience_years: 6, status: 'available', latitude: 21.1458, longitude: 79.0882 }  // Nagpur (Center)
+    { volunteer_id: 'V-001', name: 'Rahul Sharma', email: 'rahul@demo.com', skills: ['Medical', 'First Aid'], availability: 'All Days', experience_years: 5, status: 'available', latitude: 8.5241, longitude: 76.9366, location: 'Trivandrum' },
+    { volunteer_id: 'V-002', name: 'Priya Singh', email: 'priya@demo.com', skills: ['Rescue', 'Logistics'], availability: 'Weekends', experience_years: 3, status: 'available', latitude: 34.0837, longitude: 74.7973, location: 'Srinagar' },
+    { volunteer_id: 'V-003', name: 'Amit Patel', email: 'amit@demo.com', skills: ['Sanitation', 'Water'], availability: 'Mon-Fri', experience_years: 4, status: 'available', latitude: 23.0225, longitude: 72.5714, location: 'Ahmedabad' },
+    { volunteer_id: 'V-004', name: 'Sneha Rao', email: 'sneha@demo.com', skills: ['Shelter', 'Cooking'], availability: 'Immediate', experience_years: 2, status: 'available', latitude: 26.1445, longitude: 91.7362, location: 'Guwahati' },
+    { volunteer_id: 'V-005', name: 'Vikram Das', email: 'vikram@demo.com', skills: ['Rescue', 'Medical'], availability: 'All Days', experience_years: 6, status: 'available', latitude: 21.1458, longitude: 79.0882, location: 'Nagpur' }
   ];
 
   // Demo NGO tasks for the logged-out matching panel (rich descriptions)
@@ -179,6 +179,8 @@ export function Landing() {
   const [isLiveSimulating, setIsLiveSimulating] = useState(false);
   const [simVolPos, setSimVolPos] = useState({ x: 15, y: 60 });
   const [simComplete, setSimComplete] = useState(false);
+  const [simProgress, setSimProgress] = useState(0);
+  const simIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleGoogleAuth = async (targetRole: 'admin' | 'volunteer') => {
     try {
@@ -444,7 +446,7 @@ export function Landing() {
   };
 
     const pendingVolunteers = displayVolunteers.filter(v => v.status?.toLowerCase() === 'pending');
-    const _verifiedVolunteers = displayVolunteers.filter(v => v.status?.toLowerCase() !== 'pending');
+    const verifiedVolunteers = displayVolunteers.filter(v => v.status?.toLowerCase() !== 'pending');
 
 
 
@@ -887,7 +889,7 @@ export function Landing() {
                         <td style={{ padding: '15px' }}><span style={{ fontSize: '0.65rem', textTransform: 'uppercase' }}>{t.status || 'open'}</span></td>
                         <td style={{ padding: '15px' }}>
                           {(t.status === 'open' || !t.status) && (
-                            <button className="btn-premium" style={{ padding: '6px 12px', fontSize: '0.6rem' }} onClick={() => { setActiveSection('matching'); handleMatch(t.task_id || t.id); }}>
+                            <button className="btn-premium" style={{ padding: '6px 12px', fontSize: '0.6rem' }} onClick={() => { setActiveSection('matching'); handleMatch(t.task_id || t.id || ''); }}>
                               MATCH FIELD AGENT
                             </button>
                           )}

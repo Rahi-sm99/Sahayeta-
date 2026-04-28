@@ -8,8 +8,9 @@ interface UserProfile {
   id: string;
   email: string;
   role: UserRole;
-  is_approved: boolean;
-  user_metadata?: any;
+  is_approved?: boolean;
+  user_metadata?: Record<string, any>;
+  [key: string]: any;
 }
 
 interface AppState {

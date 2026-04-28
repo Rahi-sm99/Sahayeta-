@@ -1,27 +1,31 @@
 export interface Volunteer {
+  id?:               string;
   volunteer_id:      string;
   name:              string;
-  email:             string;
+  email?:            string;
   age?:              number;
   gender?:           'Male' | 'Female' | 'Other';
   skills:            string[];
   availability?:     string;
   availability_days?: string[];
-  location:          string;
+  location?:         string;
   organization_type?: string;
   experience_years:  number;
   bio?:              string;
   latitude:          number;
   longitude:         number;
-  status:            'available' | 'assigned' | 'en_route';
+  status:            string;
   assigned_task_id?:  string | null;
   last_updated?:      string;
+  phone?:            string;
 }
 
 export interface Task {
+  id?:                   string;
   task_id:               string;
   ngo_name:              string;
-  requirements:          string;
+  requirements?:         string;
+  description?:          string;
   required_skills:       string[];
   required_days:         string[];
   location:              string;
