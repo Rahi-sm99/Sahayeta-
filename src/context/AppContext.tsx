@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
 
@@ -9,6 +9,7 @@ interface UserProfile {
   email: string;
   role: UserRole;
   is_approved: boolean;
+  user_metadata?: any;
 }
 
 interface AppState {

@@ -23,7 +23,7 @@ class LocalStore {
     this.notify();
   }
 
-  updateVolunteerStatus(volId: string, status: Volunteer['status']) {
+  updateVolunteerStatus(_volId: string, _status: Volunteer['status']) {
     // This now happens in Supabase via the Landing component
   }
 
@@ -31,11 +31,11 @@ class LocalStore {
     // Simulation logic moved to real-time updates from Supabase
   }
 
-  appointVolunteer(taskId: string, volId: string) {
+  appointVolunteer(_taskId: string, _volId: string) {
     // Handled in Landing.tsx via Supabase
   }
 
-  pushCrisisTasks(type: 'flood' | 'outbreak' | 'famine', location: string) {
+  pushCrisisTasks(_type: 'flood' | 'outbreak' | 'famine', _location: string) {
     // Can be implemented to push to Supabase if needed
   }
 }

@@ -8,8 +8,13 @@ import { CrisisTimeline } from '../components/crisis/CrisisTimeline';
 import SahayetaMap from '../components/map/SahayetaMap';
 import { useApp } from '../context/AppContext';
 
+import { useRealtimeTasks } from '../hooks/useRealtimeTasks';
+import { useRealtimeVolunteers } from '../hooks/useRealtimeVolunteers';
+
 export function Dashboard() {
   const { state } = useApp();
+  const { tasks } = useRealtimeTasks();
+  const { volunteers } = useRealtimeVolunteers();
 
   return (
     <PageWrapper style={{ height: '100vh', overflow: 'hidden' }}>
@@ -33,7 +38,7 @@ export function Dashboard() {
         </div>
         
         <div style={{ flex: 1, padding: 24, display: 'flex', flexDirection: 'column' }}>
-          <SahayetaMap />
+          <SahayetaMap tasks={tasks} volunteers={volunteers} />
         </div>
       </div>
       

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Waves } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Task, Volunteer } from '../../types';

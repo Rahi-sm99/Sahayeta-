@@ -24,26 +24,20 @@ import { supabase } from '../lib/supabase';
 import { 
   Brain, 
   CheckCircle2, 
-  XCircle,
   Target,
   User,
   LogOut,
   Shield,
-  Briefcase,
   Users,
   ClipboardList,
   MapPin,
-  Phone,
-  Mail,
-  Camera,
-  Plus,
   Zap,
-  Clock,
-  Globe,
   ChevronDown,
   ChevronUp,
   Play,
-  Navigation
+  Navigation,
+  Activity,
+  ArrowRight
 } from 'lucide-react';
 import type { Volunteer, MatchResult, Task } from '../types';
 
@@ -184,13 +178,11 @@ export function Landing() {
   const [demoMatchStep, setDemoMatchStep] = useState(0);
   const [isLiveSimulating, setIsLiveSimulating] = useState(false);
   const [simVolPos, setSimVolPos] = useState({ x: 15, y: 60 });
-  const [simProgress, setSimProgress] = useState(0);
-  const simIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [simComplete, setSimComplete] = useState(false);
 
   const handleGoogleAuth = async (targetRole: 'admin' | 'volunteer') => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: window.location.origin
@@ -451,9 +443,8 @@ export function Landing() {
     }
   };
 
-  const openTasks = localTasks.filter(t => t.status === 'open').sort((a,b) => b.severity_score - a.severity_score);
-  const pendingVolunteers = displayVolunteers.filter(v => v.status?.toLowerCase() === 'pending');
-  const verifiedVolunteers = displayVolunteers.filter(v => v.status?.toLowerCase() !== 'pending');
+    const pendingVolunteers = displayVolunteers.filter(v => v.status?.toLowerCase() === 'pending');
+    const _verifiedVolunteers = displayVolunteers.filter(v => v.status?.toLowerCase() !== 'pending');
 
 
 
