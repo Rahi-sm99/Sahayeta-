@@ -37,6 +37,11 @@
 1. Clone the repository.
 2. Run `npm install`.
 3. Start development: `npm run dev`.
+| Admin Email : admin123@gmail.comn
+| Admin Password : admin123
+
+| Volunteer Email : volunteer123@gmail.com
+| Volunteer password : volunteer123
 
 ### Mobile App (Flutter)
 1. Navigate to the `application` folder.
