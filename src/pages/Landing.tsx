@@ -23,7 +23,7 @@ import { rankVolunteers } from '../lib/matching';
 import { supabase } from '../lib/supabase';
 import { GeminiInsights } from '../components/dashboard/GeminiInsights';
 import { 
-  Brain, 
+  Cpu, 
   CheckCircle2, 
   Target,
   User,
@@ -1031,7 +1031,7 @@ export function Landing() {
             <div className="dashboard-grid">
               <div className="glass-card" style={{ padding: '30px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px' }}>
-                  <Brain style={{ color: 'var(--primary)' }} size={32} />
+                  <Cpu style={{ color: 'var(--primary)' }} size={32} />
                   <h3>URGENCY ANALYSIS</h3>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -1200,12 +1200,12 @@ export function Landing() {
               )}
               {demoSelectedTask && !isDemoMatching && !demoMatchResult && (
                 <button className="btn-premium" style={{ padding: '18px 60px', fontSize: '1rem', background: 'var(--primary)', color: '#000' }} onClick={handleDemoMatch}>
-                  <Brain size={18} style={{ marginBottom: '4px' }} /> RUN AI MATCH
+                  <Cpu size={18} style={{ marginBottom: '4px' }} /> RUN AI MATCH
                 </button>
               )}
               {isDemoMatching && (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                  <Brain size={48} style={{ color: 'var(--primary)', animation: 'pulse 1s infinite' }} />
+                  <Cpu size={48} style={{ color: 'var(--primary)', animation: 'pulse 1s infinite' }} />
                   <div style={{ fontWeight: 800, fontSize: '1rem' }}>ANALYZING {publicMockVolunteers.length} AGENTS...</div>
                   <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
                     {['Scoring Skills', 'Computing Distance', 'Ranking Matches'].map((s, i) => (
@@ -1300,7 +1300,7 @@ export function Landing() {
               <div className="glass-card" style={{ minHeight: '450px' }}>
                 {isMatching ? (
                   <div style={{ height: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <Brain size={60} className="animate-pulse" style={{ color: 'var(--primary)', marginBottom: '15px' }} />
+                    <Cpu size={60} className="animate-pulse" style={{ color: 'var(--primary)', marginBottom: '15px' }} />
                     <div style={{ fontSize: '1.2rem', fontWeight: 800 }}>ANALYZING AGENT SYNERGY...</div>
                     <div style={{ color: 'var(--primary)', fontSize: '1rem' }}>{animationVol?.name}</div>
                   </div>
