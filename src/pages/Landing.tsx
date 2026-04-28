@@ -21,7 +21,7 @@ import { useApp } from '../context/AppContext';
 import SahayetaMap from '../components/map/SahayetaMap';
 import { rankVolunteers } from '../lib/matching';
 import { supabase } from '../lib/supabase';
-import { GeminiInsights } from '../components/dashboard/GeminiInsights';
+
 import { 
   Cpu, 
   CheckCircle2, 
@@ -529,10 +529,7 @@ export function Landing() {
           <span>HOME</span>
           <span className="hindi-text">होम</span>
         </div>
-        <div className={`nav-link ${activeSection === 'ai-engine' ? 'active' : ''}`} onClick={() => setActiveSection('ai-engine')}>
-          <span>AI ENGINE</span>
-          <span className="hindi-text">एआई इंजन</span>
-        </div>
+
         
         {isAdmin ? (
           <>
@@ -661,9 +658,9 @@ export function Landing() {
                 </div>
 
                 <div style={{ marginTop: '40px', display: 'flex', gap: '15px' }}>
-                  <button className="btn-premium" onClick={() => setActiveSection('ai-engine')}>
-                    <span>ENTER PIPELINE</span>
-                    <span className="hindi-text">पाइपलाइन में प्रवेश करें</span>
+                   <button className="btn-premium" onClick={() => setActiveSection('matching')}>
+                    <span>GET STARTED</span>
+                    <span className="hindi-text">शुरू करें</span>
                   </button>
                   {!state.user && (
                     <>
@@ -1021,92 +1018,7 @@ export function Landing() {
           </div>
         )}
 
-        {activeSection === 'ai-engine' && (
-          <div className="section-content animate-fade-in" style={{ maxWidth: '1400px' }}>
-            <div style={{ marginBottom: '40px' }}>
-              <h1 style={{ fontSize: '3rem !important' }}>DECISION INTELLIGENCE</h1>
-              <p style={{ color: 'var(--text-muted)' }}>AI-driven resource optimization and urgency scoring.</p>
-            </div>
-            
-            <div className="dashboard-grid">
-              <div className="glass-card" style={{ padding: '30px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px' }}>
-                  <Cpu style={{ color: 'var(--primary)' }} size={32} />
-                  <h3>URGENCY ANALYSIS</h3>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  {(isAdmin || isVolunteer ? displayTasks : demoNGOTasks).slice(0, 5).map((t: any, i) => {
-                    const score = t.severity_score || (t.priority === 'Critical' ? 95 : t.priority === 'High' ? 80 : 50);
-                    const color = score > 80 ? '#ff5c7a' : score > 60 ? '#ffb84d' : '#7ed957';
-                    const isExpanded = aiExpandedTaskId === (t.id || t.task_id);
-                    const matchedVol = demoMatchResult && isLiveSimulating && (demoMatchResult.task.id === t.id) ? demoMatchResult.volunteer.name : null;
 
-                    return (
-                      <div key={i} style={{ borderBottom: '1px solid #111', paddingBottom: '15px' }}>
-                        <div 
-                          style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
-                          onClick={() => setAiExpandedTaskId(isExpanded ? null : (t.id || t.task_id))}
-                        >
-                          <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: color, fontWeight: 900, fontSize: '0.9rem' }}>{score}%</div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <div style={{ fontSize: '0.9rem', fontWeight: 500, letterSpacing: '0.5px', color: '#fff' }}>{t.ngo_name || t.ngoName}</div>
-                              <div style={{ color: 'var(--text-muted)' }}>{isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}</div>
-                            </div>
-                            <div style={{ height: '4px', background: '#111', borderRadius: '2px', marginTop: '8px' }}>
-                              <div style={{ height: '100%', width: `${score}%`, background: color, borderRadius: '2px' }} />
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {isExpanded && (
-                          <div className="animate-fade-in" style={{ marginTop: '15px', padding: '15px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid #222' }}>
-                            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '10px' }}>{t.description || t.requirements}</p>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                              <div>
-                                <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', letterSpacing: '1px' }}>LOCATION</div>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 600 }}>{t.location}</div>
-                              </div>
-                              <div>
-                                <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', letterSpacing: '1px' }}>AGENT STATUS</div>
-                                {matchedVol ? (
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <div className="animate-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--secondary)' }} />
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--secondary)', fontWeight: 800 }}>{matchedVol} · WORK IN PROGRESS</div>
-                                  </div>
-                                ) : (
-                                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Awaiting Deployment</div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="glass-card" style={{ padding: '30px', background: 'rgba(19,136,8,0.02)', border: '1px solid rgba(19,136,8,0.2)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px' }}>
-                  <Zap style={{ color: 'var(--secondary)' }} size={32} />
-                  <h3>SMART ALLOCATION</h3>
-                </div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px' }}>Our AI engine cross-references 12+ variables to find the optimal agent for every mission.</p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div className="stat-card" style={{ background: 'rgba(0,0,0,0.3)' }}>
-                    <div className="stat-value" style={{ fontSize: '1.5rem', color: 'var(--secondary)' }}>94%</div>
-                    <div style={{ fontSize: '0.6rem' }}>MATCH PRECISION</div>
-                  </div>
-                  <div className="stat-card" style={{ background: 'rgba(0,0,0,0.3)' }}>
-                    <div className="stat-value" style={{ fontSize: '1.5rem', color: 'var(--secondary)' }}>4.2m</div>
-                    <div style={{ fontSize: '0.6rem' }}>AVG. RESPONSE</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {activeSection === 'matching' && !state.user && (
           <div className="section-content animate-fade-in" style={{ maxWidth: '1400px' }}>
@@ -1189,9 +1101,7 @@ export function Landing() {
               </div>
             </div>
 
-            <div style={{ maxWidth: '800px', margin: '40px auto 0' }}>
-              <GeminiInsights tasks={demoNGOTasks} />
-            </div>
+
 
             {/* MATCH BUTTON + RESULT */}
             <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
