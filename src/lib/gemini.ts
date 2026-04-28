@@ -15,17 +15,23 @@ export async function generateCrisisInsights(tasks: any[]) {
     - Priority geographic clusters
     
     Tasks Data:
-    ${JSON.stringify(tasks.map(t => ({ name: t.ngo_name, req: t.requirements || t.description, priority: t.priority })))}
+    ${JSON.stringify(tasks.slice(0, 10).map(t => ({ name: t.ngo_name, req: t.requirements || t.description, priority: t.priority })))}
     
     Keep it professional, high-impact, and brief. Use bold text for key terms.
+    Response must be in plain text with markdown bullet points.
   `;
 
   try {
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    return response.text();
-  } catch (error) {
-    console.error("Gemini Error:", error);
-    return "Failed to generate AI insights at this moment.";
+    const text = response.text();
+    if (!text) throw new Error("Empty response from Gemini");
+    return text;
+  } catch (error: any) {
+    console.error("GEMINI_SERVICE_ERROR:", error);
+    // Return a more helpful message if it's a common issue
+    if (error.message?.includes('API_KEY_INVALID')) return "AI Error: Invalid API Key. Please check your .env settings.";
+    if (error.message?.includes('quota')) return "AI Error: Quota exceeded. Please try again in a minute.";
+    return "AI Engine is warming up. Please refresh in a moment.";
   }
 }
